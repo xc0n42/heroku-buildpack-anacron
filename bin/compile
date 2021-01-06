@@ -1,0 +1,49 @@
+#!/usr/bin/env bash
+
+set -eo pipefail
+
+indent() {
+  sed -u 's/^/       /'
+}
+
+# Usage: $ set-env key value
+set-env() {
+  echo "export $1=$2" >> $PROFILE_PATH
+}
+
+mktmpdir() {
+  dir=$(mktemp -t fakesu-$1-XXXX)
+  rm -rf $dir
+  mkdir -p $dir
+  echo $dir
+}
+
+BUILD_DIR=$1
+CACHE_DIR=$2
+ANACRON_BUILD="$(mktmpdir anacron)"
+INSTALL_DIR="$BUILD_DIR/.heroku/vendor/anacron"
+PROFILE_PATH="$BUILD_DIR/.profile.d/anacron.sh"
+
+mkdir -p $INSTALL_DIR
+mkdir -p $(dirname $PROFILE_PATH)
+mkdir -p $CACHE_DIR
+
+if [ ! -d $CACHE_DIR/anacron ]; then
+	echo "Fetching and installing anacron" | indent
+	cd $ANACRON_BUILD
+	curl -O https://github.com/xc0n42/heroku-buildpack-anacron/blob/main/anacron-2.3.tar.gz
+	tar xvf anacron-2.3.tar.gz
+	cd anacron-2.3
+	echo "Compiling anacron" | indent
+  export PREFIX=$CACHE_DIR/anacron/
+	make install
+	cp -R $CACHE_DIR/anacron/* $INSTALL_DIR/
+else
+	echo "Installing anacron from cache" | indent
+	cp -R $CACHE_DIR/lftp/* $INSTALL_DIR/
+fi
+
+set-env PATH '/app/.heroku/vendor/anacron/bin/:$PATH'
+set-env LD_LIBRARY_PATH '/app/.heroku/vendor/anacron/lib/:$LD_LIBRARY_PATH'
+
+echo "Done" | indent
