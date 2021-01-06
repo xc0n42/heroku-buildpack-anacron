@@ -37,7 +37,7 @@ if [ ! -d $CACHE_DIR/anacron ]; then
 	echo "Compiling anacron" | indent
   export PREFIX=$CACHE_DIR/anacron/
 	make
-	cp -R $CACHE_DIR/anacron/* $INSTALL_DIR/
+	cp -R anacron $INSTALL_DIR/
 else
 	echo "Installing anacron from cache" | indent
 	cp -R $CACHE_DIR/lftp/* $INSTALL_DIR/
