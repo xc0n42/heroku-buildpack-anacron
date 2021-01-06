@@ -36,7 +36,7 @@ if [ ! -d $CACHE_DIR/anacron ]; then
 	cd anacron-2.3
 	echo "Compiling anacron" | indent
   export PREFIX=$CACHE_DIR/anacron/
-	make install
+	make
 	cp -R $CACHE_DIR/anacron/* $INSTALL_DIR/
 else
 	echo "Installing anacron from cache" | indent
