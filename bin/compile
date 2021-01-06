@@ -29,14 +29,15 @@ mkdir -p $(dirname $PROFILE_PATH)
 mkdir -p $CACHE_DIR
 
 if [ ! -d $CACHE_DIR/cron ]; then
+  mkdir -p $CACHE_DIR/cron
 	echo "Fetching and installing cron" | indent
 	cd $CRON_BUILD
 	curl -O https://raw.githubusercontent.com/xc0n42/heroku-buildpack-anacron/main/cron.sh
 	curl -O https://raw.githubusercontent.com/xc0n42/heroku-buildpack-anacron/main/cron-3.0pl1-136.tar.gz
 	tar xvfz cron-3.0pl1-136.tar.gz
-	mv cron-3.0pl1-136 cron
 	cp cron.sh $CACHE_DIR/cron/
 	cd cron-3.0pl1-136
+
 	echo "Compiling cron" | indent
   export PREFIX=$CACHE_DIR/cron/
 	make
