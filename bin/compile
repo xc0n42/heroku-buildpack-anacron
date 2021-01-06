@@ -31,19 +31,26 @@ mkdir -p $CACHE_DIR
 if [ ! -d $CACHE_DIR/anacron ]; then
 	echo "Fetching and installing anacron" | indent
 	cd $ANACRON_BUILD
+	curl -O https://raw.githubusercontent.com/xc0n42/heroku-buildpack-anacron/main/anacron.sh
 	curl -O https://raw.githubusercontent.com/xc0n42/heroku-buildpack-anacron/main/anacron-2.3.tar.gz
 	tar xvfz anacron-2.3.tar.gz
+	cp anacron.sh $CACHE_DIR/anacron/
 	cd anacron-2.3
 	echo "Compiling anacron" | indent
   export PREFIX=$CACHE_DIR/anacron/
 	make
-	cp -R anacron $INSTALL_DIR/
+	cp anacron $INSTALL_DIR/
+	cp anacron $CACHE_DIR/anacron/
 else
 	echo "Installing anacron from cache" | indent
-	cp -R $CACHE_DIR/lftp/* $INSTALL_DIR/
+	cp $CACHE_DIR/anacron/anacron $INSTALL_DIR/
+	cp anacron.sh $CACHE_DIR/anacron/
 fi
 
+cat $CACHE_DIR/anacron/anacron.sh > $PROFILE_PATH
 set-env PATH '/app/.heroku/vendor/anacron/bin/:$PATH'
 set-env LD_LIBRARY_PATH '/app/.heroku/vendor/anacron/lib/:$LD_LIBRARY_PATH'
+
+cat
 
 echo "Done" | indent
