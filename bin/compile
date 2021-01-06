@@ -20,36 +20,36 @@ mktmpdir() {
 
 BUILD_DIR=$1
 CACHE_DIR=$2
-ANACRON_BUILD="$(mktmpdir anacron)"
-INSTALL_DIR="$BUILD_DIR/.heroku/vendor/anacron"
-PROFILE_PATH="$BUILD_DIR/.profile.d/anacron.sh"
+cron_BUILD="$(mktmpdir cron)"
+INSTALL_DIR="$BUILD_DIR/.heroku/vendor/cron"
+PROFILE_PATH="$BUILD_DIR/.profile.d/cron.sh"
 
 mkdir -p $INSTALL_DIR
 mkdir -p $(dirname $PROFILE_PATH)
 mkdir -p $CACHE_DIR
 
-if [ ! -d $CACHE_DIR/anacron ]; then
-	echo "Fetching and installing anacron" | indent
-	cd $ANACRON_BUILD
-	curl -O https://raw.githubusercontent.com/xc0n42/heroku-buildpack-anacron/main/anacron.sh
+if [ ! -d $CACHE_DIR/cron ]; then
+	echo "Fetching and installing cron" | indent
+	cd $cron_BUILD
+	curl -O https://raw.githubusercontent.com/xc0n42/heroku-buildpack-anacron/main/cron.sh
 	curl -O https://raw.githubusercontent.com/xc0n42/heroku-buildpack-anacron/main/cron-3.0pl1-136.tar.gz
 	tar xvfz cron-3.0pl1-136.tar.gz
-	cp anacron.sh $CACHE_DIR/anacron/
+	cp cron.sh $CACHE_DIR/cron/
 	cd cron-3.0pl1-136
-	echo "Compiling anacron" | indent
-  export PREFIX=$CACHE_DIR/anacron/
+	echo "Compiling cron" | indent
+  export PREFIX=$CACHE_DIR/cron/
 	make
 	cp cron $INSTALL_DIR/
-	cp cron $CACHE_DIR/anacron/
+	cp cron $CACHE_DIR/cron/
 else
-	echo "Installing anacron from cache" | indent
-	cp $CACHE_DIR/anacron/cron $INSTALL_DIR/
-	cp anacron.sh $CACHE_DIR/anacron/
+	echo "Installing cron from cache" | indent
+	cp $CACHE_DIR/cron/cron $INSTALL_DIR/
+	cp cron.sh $CACHE_DIR/cron/
 fi
 
-cat $CACHE_DIR/anacron/anacron.sh > $PROFILE_PATH
-set-env PATH '/app/.heroku/vendor/anacron/bin/:$PATH'
-set-env LD_LIBRARY_PATH '/app/.heroku/vendor/anacron/lib/:$LD_LIBRARY_PATH'
+cat $CACHE_DIR/cron/cron.sh > $PROFILE_PATH
+set-env PATH '/app/.heroku/vendor/cron/bin/:$PATH'
+set-env LD_LIBRARY_PATH '/app/.heroku/vendor/cron/lib/:$LD_LIBRARY_PATH'
 
 cat
 
