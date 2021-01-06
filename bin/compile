@@ -20,7 +20,7 @@ mktmpdir() {
 
 BUILD_DIR=$1
 CACHE_DIR=$2
-cron_BUILD="$(mktmpdir cron)"
+CRON_BUILD="$(mktmpdir cron)"
 INSTALL_DIR="$BUILD_DIR/.heroku/vendor/cron"
 PROFILE_PATH="$BUILD_DIR/.profile.d/cron.sh"
 
@@ -30,10 +30,11 @@ mkdir -p $CACHE_DIR
 
 if [ ! -d $CACHE_DIR/cron ]; then
 	echo "Fetching and installing cron" | indent
-	cd $cron_BUILD
+	cd $CRON_BUILD
 	curl -O https://raw.githubusercontent.com/xc0n42/heroku-buildpack-anacron/main/cron.sh
 	curl -O https://raw.githubusercontent.com/xc0n42/heroku-buildpack-anacron/main/cron-3.0pl1-136.tar.gz
 	tar xvfz cron-3.0pl1-136.tar.gz
+	mv cron-3.0pl1-136 cron
 	cp cron.sh $CACHE_DIR/cron/
 	cd cron-3.0pl1-136
 	echo "Compiling cron" | indent
