@@ -3,6 +3,10 @@ if [ ! -d /app/cron ]; then
   mkdir /app/cron
 fi
 
+if [ ! -d /app/cron.d ]; then
+  mkdir /app/cron.d
+fi
+
 if [ ! -d /app/cron/crontabs ]; then
   mkdir /app/cron/crontabs
 fi
