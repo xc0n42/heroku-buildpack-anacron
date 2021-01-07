@@ -11,7 +11,7 @@ if [ ! -f /app/crontab ]; then
   touch /app/crontab
 fi
 
-if [ -f /app/.heroku/vendor/anacron/cron ]; then
-  /app/.heroku/vendor/anacron/cron
+if [ -f /app/.heroku/vendor/cron/cron ]; then
+  /app/.heroku/vendor/cron/cron
 fi
 

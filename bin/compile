@@ -28,7 +28,7 @@ mkdir -p $INSTALL_DIR
 mkdir -p $(dirname $PROFILE_PATH)
 mkdir -p $CACHE_DIR
 
-if [ ! -d $CACHE_DIR/crond ]; then
+if [ ! -d $CACHE_DIR/cron ]; then
   mkdir -p $CACHE_DIR/cron
 	echo "Fetching and installing cron" | indent
 	cd $CRON_BUILD
